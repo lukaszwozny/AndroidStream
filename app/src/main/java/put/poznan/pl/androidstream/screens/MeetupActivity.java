@@ -39,14 +39,7 @@ public class MeetupActivity extends AppCompatActivity {
         Observable<ResponseBody> meetupStream();
     }
 
-    // the service to access the api
-    MeetupAPI mMeetupAPI = new Retrofit.Builder()
-            .baseUrl("http://stream.meetup.com/2/")
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(MeetupAPI.class);
-
+    StreamApi api;
     RxSchedulers schedulers;
 
     Subscription mSubs = null;
@@ -63,7 +56,7 @@ public class MeetupActivity extends AppCompatActivity {
     }
 
     private void injectDependencies() {
-//        api = AppController.getAppComponent().streamApi();
+        api = AppController.getAppComponent().streamApi();
         schedulers = AppController.getAppComponent().schedulers();
     }
 
@@ -76,7 +69,7 @@ public class MeetupActivity extends AppCompatActivity {
     void listen() {
         // only subscribe to the stream if we're not already listening
         if (mSubs == null || mSubs.isUnsubscribed()) {
-            mSubs = mMeetupAPI.meetupStream()
+            mSubs = api.meetupStream()
                     .subscribeOn(Schedulers.newThread())
                     .flatMap(responseBody -> events(responseBody.source()))
                     .map(item -> mGson.fromJson(item, RSVP.class))

@@ -18,5 +18,4 @@ public interface AppComponent {
     AppSettings settings();
     RxSchedulers schedulers();
     StreamApi streamApi();
-    Retrofit retrofit();
 }

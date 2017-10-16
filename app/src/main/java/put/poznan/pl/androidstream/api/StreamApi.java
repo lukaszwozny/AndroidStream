@@ -11,5 +11,5 @@ import rx.Observable;
 public interface StreamApi {
     @Streaming
     @GET("rsvps")
-    Observable<ResponseBody> downloadFile();
+    Observable<ResponseBody> meetupStream();
 }

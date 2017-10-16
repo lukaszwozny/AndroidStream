@@ -19,16 +19,6 @@ import java.io.File;
 @Module
 public class NetworkModule {
 
-    //    private static final String BASE_URL = "http://www.youtube.com/";
-    private static final String BASE_URL = "http://stream.meetup.com/2/";
-
-    @AppScope
-    @Provides
-    @Named("BASE_URL")
-    String provideBaseUrl() {
-        return BASE_URL;
-    }
-
     @AppScope
     @Provides
     OkHttpClient provideHttpClient(
@@ -78,14 +68,6 @@ public class NetworkModule {
     @Provides
     GsonConverterFactory provideGsonClient() {
         return GsonConverterFactory.create();
-    }
-
-    @AppScope
-    @Provides
-    Retrofit provideRetrofit(OkHttpClient client, GsonConverterFactory gson, RxJavaCallAdapterFactory rxAdapter){
-        return new Retrofit.Builder().client(client)
-                .baseUrl(BASE_URL).addConverterFactory(gson)
-                .addCallAdapterFactory(rxAdapter).build();
     }
 
 }
