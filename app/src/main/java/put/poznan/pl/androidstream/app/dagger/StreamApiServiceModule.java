@@ -13,24 +13,25 @@ import javax.inject.Named;
 @Module
 public class StreamApiServiceModule {
 
-    private static final String BASE_URL = "http://www.youtube.com/";
+    //    private static final String BASE_URL = "http://www.youtube.com/";
+    private static final String BASE_URL = "http://stream.meetup.com/";
 
     @AppScope
     @Provides
     @Named("BASE_URL")
-    String provideBaseUrl(){
+    String provideBaseUrl() {
         return BASE_URL;
     }
 
     @AppScope
     @Provides
-    StreamApi provideQuizApi(OkHttpClient client, GsonConverterFactory gson, RxJavaCallAdapterFactory rxAdapter){
+    StreamApi provideQuizApi(OkHttpClient client, GsonConverterFactory gson, RxJavaCallAdapterFactory rxAdapter) {
 
-        Retrofit retrofit =   new Retrofit.Builder().client(client)
-                .baseUrl(BASE_URL).addConverterFactory(gson).
-                        addCallAdapterFactory(rxAdapter).build();
+        Retrofit retrofit = new Retrofit.Builder().client(client)
+                .baseUrl(BASE_URL).addConverterFactory(gson)
+                .addCallAdapterFactory(rxAdapter).build();
 
-        return  retrofit.create(StreamApi.class);
+        return retrofit.create(StreamApi.class);
     }
 
 }

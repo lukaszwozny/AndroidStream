@@ -1,4 +1,4 @@
-package put.poznan.pl.androidstream;
+package put.poznan.pl.androidstream.screens;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +8,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import put.poznan.pl.androidstream.R;
+import put.poznan.pl.androidstream.api.StreamApi;
+import put.poznan.pl.androidstream.app.AppController;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -26,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_main, new StreamFragment())
+                .commit();
     }
 
     @Override

@@ -5,11 +5,11 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Streaming;
+import retrofit2.http.Url;
+import rx.Observable;
 
 public interface StreamApi {
-    @GET("/{url}/")
     @Streaming
-    Call<ResponseBody> getEventDetail(
-            @Path("url") String url
-    );
+    @GET("/2/rsvps")
+    Observable<ResponseBody> downloadFile();
 }
