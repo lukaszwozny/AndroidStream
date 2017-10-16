@@ -10,6 +10,6 @@ import rx.Observable;
 
 public interface StreamApi {
     @Streaming
-    @GET("/2/rsvps")
+    @GET("rsvps")
     Observable<ResponseBody> downloadFile();
 }

@@ -9,5 +9,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Stream fragment"/>
+    <Button
+        android:id="@+id/button_goto_stream"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go to Stream Screen"/>
 
 </LinearLayout>

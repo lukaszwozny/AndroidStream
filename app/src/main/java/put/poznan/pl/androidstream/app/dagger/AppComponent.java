@@ -4,6 +4,7 @@ import dagger.Component;
 import put.poznan.pl.androidstream.api.StreamApi;
 import put.poznan.pl.androidstream.app.AppSettings;
 import put.poznan.pl.androidstream.utils.RxSchedulers;
+import retrofit2.Retrofit;
 
 @AppScope
 @Component(modules = {
@@ -17,4 +18,5 @@ public interface AppComponent {
     AppSettings settings();
     RxSchedulers schedulers();
     StreamApi streamApi();
+    Retrofit retrofit();
 }
