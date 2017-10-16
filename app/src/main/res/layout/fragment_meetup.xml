@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:id="@+id/text_item"
+              android:textSize="18sp"
+              android:text="....." android:layout_above="@+id/listen" android:layout_centerHorizontal="true"
+              android:layout_marginBottom="83dp">
+
+    </TextView>
+    <Button
+        android:id="@+id/listen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Listen to events!"
+        android:textSize="25sp"/>
+
+    <Button
+        android:id="@+id/enough"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/listen"
+        android:layout_centerHorizontal="true"
+        android:text="Enough events!"
+        android:textSize="25sp"/>
+
+</RelativeLayout>

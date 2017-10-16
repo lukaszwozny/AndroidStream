@@ -4,7 +4,6 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
 import put.poznan.pl.androidstream.api.StreamApi;
-import put.poznan.pl.androidstream.screens.MeetupActivity;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;

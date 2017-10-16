@@ -13,6 +13,7 @@ import butterknife.Unbinder;
 import put.poznan.pl.androidstream.R;
 import put.poznan.pl.androidstream.api.StreamApi;
 import put.poznan.pl.androidstream.app.AppController;
+import put.poznan.pl.androidstream.screens.meetup.MeetupActivity;
 
 public class StreamFragment extends Fragment {
 
