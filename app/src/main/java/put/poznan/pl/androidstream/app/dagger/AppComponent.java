@@ -8,6 +8,7 @@ import put.poznan.pl.androidstream.utils.RxSchedulers;
 @Component(modules = {
         AppContextModule.class,
         AppSettingsModule.class,
+        NetworkModule.class,
         RxModule.class
 })
 public interface AppComponent {
