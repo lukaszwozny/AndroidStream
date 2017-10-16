@@ -9,7 +9,8 @@ import put.poznan.pl.androidstream.utils.RxSchedulers;
         AppContextModule.class,
         AppSettingsModule.class,
         NetworkModule.class,
-        RxModule.class
+        RxModule.class,
+        StreamApiServiceModule.class
 })
 public interface AppComponent {
     AppSettings settings();
