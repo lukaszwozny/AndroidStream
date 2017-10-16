@@ -4,7 +4,8 @@ import dagger.Component;
 
 @AppScope
 @Component(modules = {
-        AppContextModule.class
+        AppContextModule.class,
+        AppSettingsModule.class
 })
 public interface AppComponent {
 }
