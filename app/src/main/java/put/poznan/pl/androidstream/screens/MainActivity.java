@@ -12,6 +12,7 @@ import put.poznan.pl.androidstream.R;
 import put.poznan.pl.androidstream.api.StreamApi;
 import put.poznan.pl.androidstream.app.AppController;
 import put.poznan.pl.androidstream.screens.meetup.MeetupFragment;
+import put.poznan.pl.androidstream.screens.stream.StreamFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_main, new MeetupFragment())
+                .replace(R.id.content_main, new StreamFragment())
                 .commit();
     }
 

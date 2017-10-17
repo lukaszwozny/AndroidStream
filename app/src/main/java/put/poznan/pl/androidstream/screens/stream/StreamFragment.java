@@ -1,4 +1,4 @@
-package put.poznan.pl.androidstream.screens;
+package put.poznan.pl.androidstream.screens.stream;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,11 +14,15 @@ import put.poznan.pl.androidstream.R;
 import put.poznan.pl.androidstream.api.StreamApi;
 import put.poznan.pl.androidstream.app.AppController;
 import put.poznan.pl.androidstream.screens.meetup.MeetupActivity;
+import put.poznan.pl.androidstream.screens.stream.dagger.DaggerStreamComponent;
+import put.poznan.pl.androidstream.screens.stream.dagger.StreamComponent;
 
 public class StreamFragment extends Fragment {
 
     StreamApi api;
     private Unbinder unbinder;
+
+    private StreamComponent component;
 
     @Nullable
     @Override
@@ -48,6 +52,9 @@ public class StreamFragment extends Fragment {
     }
 
     private void injectDependencies() {
+        component = DaggerStreamComponent.builder()
+                .appComponent(AppController.getAppComponent())
+                .build();
         api = AppController.getAppComponent().streamApi();
     }
 }

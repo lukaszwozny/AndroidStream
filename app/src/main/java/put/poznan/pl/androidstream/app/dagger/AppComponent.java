@@ -2,6 +2,7 @@ package put.poznan.pl.androidstream.app.dagger;
 
 import dagger.Component;
 import put.poznan.pl.androidstream.api.StreamApi;
+import put.poznan.pl.androidstream.api.YoutubeApi;
 import put.poznan.pl.androidstream.app.AppSettings;
 import put.poznan.pl.androidstream.utils.RxSchedulers;
 import retrofit2.Retrofit;
@@ -12,7 +13,8 @@ import retrofit2.Retrofit;
         AppSettingsModule.class,
         NetworkModule.class,
         RxModule.class,
-        StreamApiServiceModule.class
+        StreamApiServiceModule.class,
+        YoutubeApiServiceModule.class
 })
 public interface AppComponent {
     AppSettings settings();
