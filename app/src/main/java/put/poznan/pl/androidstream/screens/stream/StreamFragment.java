@@ -10,14 +10,18 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 import put.poznan.pl.androidstream.R;
 import put.poznan.pl.androidstream.api.StreamApi;
 import put.poznan.pl.androidstream.app.AppController;
 import put.poznan.pl.androidstream.screens.meetup.MeetupActivity;
+import put.poznan.pl.androidstream.screens.stream.core.StreamPresenter;
+import put.poznan.pl.androidstream.screens.stream.core.StreamView;
 import put.poznan.pl.androidstream.screens.stream.dagger.DaggerStreamComponent;
 import put.poznan.pl.androidstream.screens.stream.dagger.StreamComponent;
 
-public class StreamFragment extends Fragment {
+public class StreamFragment extends MvpFragment<StreamView, StreamPresenter>
+implements StreamView{
 
     StreamApi api;
     private Unbinder unbinder;
@@ -28,6 +32,11 @@ public class StreamFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_stream, container, false);
+    }
+
+    @Override
+    public StreamPresenter createPresenter() {
+        return component.presenter();
     }
 
     @Override
@@ -43,6 +52,7 @@ public class StreamFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+        component = null;
     }
 
     @OnClick(R.id.button_goto_stream)
