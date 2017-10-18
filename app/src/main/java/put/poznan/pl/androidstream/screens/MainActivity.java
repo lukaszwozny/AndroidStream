@@ -1,5 +1,6 @@
 package put.poznan.pl.androidstream.screens;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +14,7 @@ import put.poznan.pl.androidstream.R;
 import put.poznan.pl.androidstream.api.StreamApi;
 import put.poznan.pl.androidstream.app.AppController;
 import put.poznan.pl.androidstream.screens.meetup.MeetupFragment;
+import put.poznan.pl.androidstream.screens.opengl.OpenGLActivity;
 import put.poznan.pl.androidstream.screens.opengl.OpenGLFragment;
 import put.poznan.pl.androidstream.screens.stream.StreamFragment;
 
@@ -68,7 +70,9 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new StreamFragment();
                 break;
             case R.id.action_opengl:
-                fragment = new OpenGLFragment();
+                Intent intent = new Intent(this, OpenGLActivity.class);
+                startActivity(intent);
+//                fragment = new OpenGLFragment();
                 break;
         }
 
