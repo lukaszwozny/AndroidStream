@@ -1,7 +1,6 @@
 package put.poznan.pl.androidstream.screens.stream.core;
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
-import put.poznan.pl.androidstream.api.YoutubeApi;
 import put.poznan.pl.androidstream.utils.RxSchedulers;
 import timber.log.Timber;
 
@@ -15,13 +14,25 @@ public class StreamPresenter extends MvpBasePresenter<StreamView> {
         this.model = model;
     }
 
-    public void getVideoUrl(){
-        model.provideVideoUrl()
+    public void getVideo1(){
+        getVideoUrl(model.VIDEO_1);
+    }
+
+    public void getVideo2(){
+        getVideoUrl(model.VIDEO_2);
+    }
+
+    public void getVideo3(){
+        getVideoUrl(model.VIDEO_3);
+    }
+
+    private void getVideoUrl(final String video_url) {
+        model.provideVideoUrl(video_url)
                 .subscribeOn(schedulers.internet())
                 .observeOn(schedulers.androidThread())
                 .subscribe(v -> {
-                    getView().setVideoUrlView(v.getVidUrl());
-                },throwable -> {
+                    getView().playVideoFromUrl(v.getVidUrl());
+                }, throwable -> {
                     Timber.e(throwable.getMessage());
                 });
     }

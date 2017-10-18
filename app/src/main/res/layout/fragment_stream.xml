@@ -5,19 +5,36 @@
               android:layout_height="match_parent"
               android:id="@+id/fragment_stream">
 
-    <VideoView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:id="@+id/video_stream"/>
-    <TextView
-        android:id="@+id/text_yt_vid_url"
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:text="Stream fragment"/>
-    <Button
-        android:id="@+id/button_get_yt_vid"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get YT vid url"/>
+        android:orientation="vertical">
+        <VideoView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_margin="1dp"
+            android:id="@+id/video_stream"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/button_get_video_1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Video 1"/>
+        <Button
+            android:id="@+id/button_get_video_2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Video 2"/>
+        <Button
+            android:id="@+id/button_get_video_3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Video 3"/>
+
+    </LinearLayout>
 
 </LinearLayout>

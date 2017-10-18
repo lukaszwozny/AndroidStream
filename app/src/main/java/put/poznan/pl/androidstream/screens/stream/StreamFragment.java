@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
 import butterknife.BindView;
@@ -29,9 +30,6 @@ import timber.log.Timber;
 
 public class StreamFragment extends MvpFragment<StreamView, StreamPresenter>
         implements StreamView {
-
-    @BindView(R.id.text_yt_vid_url)
-    TextView ytVidUrlView;
 
     @BindView(R.id.video_stream)
     VideoView videoView;
@@ -60,10 +58,6 @@ public class StreamFragment extends MvpFragment<StreamView, StreamPresenter>
 
         getActivity().setTitle("Stream :)");
 
-        //shared_pref = new Shared_Pref(getApplicationContext());
-        String path = "android.resource://" + getActivity().getPackageName() + "/" + R.raw.sample_video;
-        videoView.setVideoURI(Uri.parse(path));
-
         // add simple touch listener
         videoView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -76,7 +70,6 @@ public class StreamFragment extends MvpFragment<StreamView, StreamPresenter>
                 return false;
             }
         });
-
     }
 
     @Override
@@ -86,14 +79,27 @@ public class StreamFragment extends MvpFragment<StreamView, StreamPresenter>
         component = null;
     }
 
-    @OnClick(R.id.button_get_yt_vid)
-    void showStreamScreen() {
-        presenter.getVideoUrl();
+    @OnClick(R.id.button_get_video_1)
+    void getVideo1() {
+        presenter.getVideo1();
+    }
+
+    @OnClick(R.id.button_get_video_2)
+    void getVideo2() {
+        presenter.getVideo2();
+    }
+
+    @OnClick(R.id.button_get_video_3)
+    void getVideo3() {
+        presenter.getVideo3();
     }
 
     @Override
-    public void setVideoUrlView(String url){
-        ytVidUrlView.setText(url);
+    public void playVideoFromUrl(String url) {
+        if(!videoView.isPlaying()){
+            videoView.start();
+        }
+        videoView.setVideoURI(Uri.parse(url));
     }
 
     private void injectDependencies() {
