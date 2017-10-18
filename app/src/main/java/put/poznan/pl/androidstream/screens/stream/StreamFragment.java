@@ -1,9 +1,15 @@
 package put.poznan.pl.androidstream.screens.stream;
 
+import android.Manifest;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -63,14 +69,30 @@ public class StreamFragment extends MvpFragment<StreamView, StreamPresenter>
         videoView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(videoView.isPlaying()){
+                if (videoView.isPlaying()) {
                     videoView.pause();
-                }else {
+                } else {
                     videoView.start();
                 }
                 return false;
             }
         });
+    }
+
+    public  boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (getActivity().checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
+        }
+        else { //permission is automatically granted on sdk<23 upon installation
+            return true;
+        }
     }
 
     @Override
@@ -97,12 +119,18 @@ public class StreamFragment extends MvpFragment<StreamView, StreamPresenter>
 
     @OnClick(R.id.button_use_download_Manager)
     void useDownloadManager() {
-        presenter.useDownloadManager();
+        if(isStoragePermissionGranted()){
+            DownloadManager manager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+            presenter.useDownloadManager(manager);
+
+        } else {
+            Timber.i("No permission");
+        }
     }
 
     @Override
     public void playVideoFromUrl(VideoUrl videoUrl) {
-        if(!videoView.isPlaying()){
+        if (!videoView.isPlaying()) {
             videoView.start();
         }
         videoView.setVideoURI(Uri.parse(videoUrl.getVidUrl()));
