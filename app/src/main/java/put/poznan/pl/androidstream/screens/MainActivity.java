@@ -3,6 +3,7 @@ package put.poznan.pl.androidstream.screens;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,6 +13,7 @@ import put.poznan.pl.androidstream.R;
 import put.poznan.pl.androidstream.api.StreamApi;
 import put.poznan.pl.androidstream.app.AppController;
 import put.poznan.pl.androidstream.screens.meetup.MeetupFragment;
+import put.poznan.pl.androidstream.screens.opengl.OpenGLFragment;
 import put.poznan.pl.androidstream.screens.stream.StreamFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,9 +35,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.content_main, new StreamFragment())
-                .commit();
+        showScreenById(R.id.action_opengl);
     }
 
     @Override
@@ -52,11 +52,30 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        showScreenById(id);
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showScreenById(int id) {
+        Fragment fragment = null;
+
+        switch (id) {
+            case R.id.action_meetup:
+                fragment = new MeetupFragment();
+                break;
+            case R.id.action_stream:
+                fragment = new StreamFragment();
+                break;
+            case R.id.action_opengl:
+                fragment = new OpenGLFragment();
+                break;
+        }
+
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content_main, fragment)
+                    .commit();
+        }
     }
 }

@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">AndroidStream</string>
     <string name="action_settings">Settings</string>
+    <string name="action_meetup">Meetup Screen</string>
+    <string name="sction_stream">Stream Screen</string>
+    <string name="action_opengl">OpenGL Screen</string>
 </resources>

@@ -2,8 +2,16 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="put.poznan.pl.androidstream.screens.MainActivity">
-    <item android:id="@+id/action_settings"
-          android:title="@string/action_settings"
+    <item android:id="@+id/action_opengl"
+          android:title="@string/action_opengl"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+    <item android:id="@+id/action_stream"
+          android:title="@string/sction_stream"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+    <item android:id="@+id/action_meetup"
+          android:title="@string/action_meetup"
           android:orderInCategory="100"
           app:showAsAction="never"/>
 </menu>
