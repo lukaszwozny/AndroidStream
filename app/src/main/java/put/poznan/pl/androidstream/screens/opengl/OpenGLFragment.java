@@ -5,17 +5,27 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import put.poznan.pl.androidstream.R;
+import put.poznan.pl.androidstream.app.AppController;
+import put.poznan.pl.androidstream.screens.opengl.dagger.DaggerOpenGLComponent;
+import put.poznan.pl.androidstream.screens.opengl.dagger.OpenGLComponent;
+import put.poznan.pl.androidstream.screens.opengl.dagger.OpenGLModule;
+import timber.log.Timber;
 
 public class OpenGLFragment extends Fragment {
+    @BindView(R.id.view_surface)
+    GLSurfaceView surfaceView;
 
-    /** Hold a reference to our GLSurfaceView */
-    private GLSurfaceView mGLSurfaceView;
+    private OpenGLComponent component;
+
+    private MyGLRenderer renderer;
+    private DemoRenderer demoRenderer;
 
     private Unbinder unbinder;
 
@@ -28,10 +38,30 @@ public class OpenGLFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        injectDependencies();
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this,view);
 
+        if (renderer != null){
+            Timber.i("Not null :)");
+        } else {
+            Timber.i("Null :(");
+        }
+
+        surfaceView.setRenderer(demoRenderer);
+//        surfaceView.setRenderer(new DemoRenderer());
+
         getActivity().setTitle("OpenGL");
+    }
+
+    private void injectDependencies() {
+        component = DaggerOpenGLComponent.builder()
+                .appComponent(AppController.getAppComponent())
+                .openGLModule(new OpenGLModule(this))
+                .build();
+
+        renderer = component.renderer();
+        demoRenderer = component.demoRenderer();
     }
 
     @Override
