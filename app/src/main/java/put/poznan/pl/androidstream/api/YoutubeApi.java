@@ -7,8 +7,8 @@ import retrofit2.http.*;
 import rx.Observable;
 
 public interface YoutubeApi {
-    @POST("/")
+    @GET("/")
     Observable<VideoUrl> getYtVidUrl(
-            @Field("url") String yt_url
+            @Query("url") String yt_url
     );
 }

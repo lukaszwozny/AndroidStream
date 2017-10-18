@@ -61,10 +61,14 @@ public class StreamFragment extends MvpFragment<StreamView, StreamPresenter>
         component = null;
     }
 
-    @OnClick(R.id.button_goto_stream)
+    @OnClick(R.id.button_get_yt_vid)
     void showStreamScreen() {
-        Intent intent = new Intent(getActivity(), MeetupActivity.class);
-        startActivity(intent);
+        presenter.getVideoUrl();
+    }
+
+    @Override
+    public void setVideoUrlView(String url){
+        ytVidUrlView.setText(url);
     }
 
     private void injectDependencies() {

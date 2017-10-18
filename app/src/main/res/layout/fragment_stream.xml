@@ -11,7 +11,7 @@
         android:layout_height="500dp"
         android:text="Stream fragment"/>
     <Button
-        android:id="@+id/button_goto_stream"
+        android:id="@+id/button_get_yt_vid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Get YT vid url"/>
