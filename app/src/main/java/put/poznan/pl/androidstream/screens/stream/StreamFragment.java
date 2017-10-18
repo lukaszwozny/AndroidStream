@@ -21,6 +21,7 @@ import put.poznan.pl.androidstream.R;
 import put.poznan.pl.androidstream.api.StreamApi;
 import put.poznan.pl.androidstream.api.YoutubeApi;
 import put.poznan.pl.androidstream.app.AppController;
+import put.poznan.pl.androidstream.models.VideoUrl;
 import put.poznan.pl.androidstream.screens.meetup.MeetupActivity;
 import put.poznan.pl.androidstream.screens.stream.core.StreamPresenter;
 import put.poznan.pl.androidstream.screens.stream.core.StreamView;
@@ -95,11 +96,12 @@ public class StreamFragment extends MvpFragment<StreamView, StreamPresenter>
     }
 
     @Override
-    public void playVideoFromUrl(String url) {
+    public void playVideoFromUrl(VideoUrl videoUrl) {
         if(!videoView.isPlaying()){
             videoView.start();
         }
-        videoView.setVideoURI(Uri.parse(url));
+        videoView.setVideoURI(Uri.parse(videoUrl.getVidUrl()));
+        getActivity().setTitle(videoUrl.getTitle());
     }
 
     private void injectDependencies() {

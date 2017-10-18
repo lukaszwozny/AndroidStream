@@ -31,7 +31,7 @@ public class StreamPresenter extends MvpBasePresenter<StreamView> {
                 .subscribeOn(schedulers.internet())
                 .observeOn(schedulers.androidThread())
                 .subscribe(v -> {
-                    getView().playVideoFromUrl(v.getVidUrl());
+                    getView().playVideoFromUrl(v);
                 }, throwable -> {
                     Timber.e(throwable.getMessage());
                 });
