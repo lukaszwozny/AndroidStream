@@ -34,6 +34,11 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="Video 3"/>
+        <Button
+            android:id="@+id/button_use_download_Manager"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Download manager"/>
 
     </LinearLayout>
 

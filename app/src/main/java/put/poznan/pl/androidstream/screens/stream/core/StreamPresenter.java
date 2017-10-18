@@ -1,5 +1,7 @@
 package put.poznan.pl.androidstream.screens.stream.core;
 
+import android.app.DownloadManager;
+import android.net.Uri;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import put.poznan.pl.androidstream.utils.RxSchedulers;
 import timber.log.Timber;
@@ -8,6 +10,8 @@ public class StreamPresenter extends MvpBasePresenter<StreamView> {
 
     private RxSchedulers schedulers;
     private StreamModel model;
+
+    private String full_vid_url = null;
 
     public StreamPresenter(RxSchedulers schedulers, StreamModel model) {
         this.schedulers = schedulers;
@@ -31,9 +35,21 @@ public class StreamPresenter extends MvpBasePresenter<StreamView> {
                 .subscribeOn(schedulers.internet())
                 .observeOn(schedulers.androidThread())
                 .subscribe(v -> {
+                    full_vid_url = v.getVidUrl();
                     getView().playVideoFromUrl(v);
                 }, throwable -> {
                     Timber.e(throwable.getMessage());
                 });
+    }
+
+    public void useDownloadManager(){
+        if(full_vid_url != null){
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(full_vid_url));
+            request.setDescription("Some descrition");
+            request.setTitle("Some title");
+
+        } else {
+            Timber.e("Url to vid is null");
+        }
     }
 }

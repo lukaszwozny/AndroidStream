@@ -95,6 +95,11 @@ public class StreamFragment extends MvpFragment<StreamView, StreamPresenter>
         presenter.getVideo3();
     }
 
+    @OnClick(R.id.button_use_download_Manager)
+    void useDownloadManager() {
+        presenter.useDownloadManager();
+    }
+
     @Override
     public void playVideoFromUrl(VideoUrl videoUrl) {
         if(!videoView.isPlaying()){
