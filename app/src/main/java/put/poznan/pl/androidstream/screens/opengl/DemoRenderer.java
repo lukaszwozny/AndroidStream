@@ -45,10 +45,11 @@ public class DemoRenderer implements GLSurfaceView.Renderer {
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
         gl.glLoadIdentity();
         gl.glTranslatef(0.0f, 0.0f, -10.0f);
-        gl.glRotatef(rotation, 1.0f, 1.0f, 1.0f);
+        gl.glRotatef(rotation, 0.0f, 1.0f, 0.0f);
+
         cube.draw(gl);
         gl.glLoadIdentity();
-        rotation -= 0.15f;
+        rotation -= 4.5f;
     }
 
 }

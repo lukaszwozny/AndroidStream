@@ -4,10 +4,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -49,7 +46,13 @@ public class OpenGLFragment extends Fragment {
         }
 
         surfaceView.setRenderer(demoRenderer);
-//        surfaceView.setRenderer(new DemoRenderer());
+
+        surfaceView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });
 
         getActivity().setTitle("OpenGL");
     }
