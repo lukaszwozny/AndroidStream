@@ -10,6 +10,6 @@ import rx.Observable;
 
 public interface StreamApi {
     @Streaming
-    @GET("watch?v=jruKwPpKIv0")
+    @GET("rsvps")
     Observable<ResponseBody> meetupStream();
 }

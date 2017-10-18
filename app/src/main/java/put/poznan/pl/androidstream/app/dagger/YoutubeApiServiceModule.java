@@ -15,7 +15,7 @@ import javax.inject.Named;
 public class YoutubeApiServiceModule {
 
     //    private static final String BASE_URL = "http://www.youtube.com/";
-    private static final String YT_BASE_URL = "https://www.youtube.com/";
+    private static final String YT_BASE_URL = "http://tamburyniarz.pythonanywhere.com/";
 
     @AppScope
     @Provides

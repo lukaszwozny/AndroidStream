@@ -6,13 +6,14 @@
               android:id="@+id/fragment_stream">
 
     <TextView
+        android:id="@+id/text_yt_vid_url"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="500dp"
         android:text="Stream fragment"/>
     <Button
         android:id="@+id/button_goto_stream"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Go to Stream Screen"/>
+        android:text="Get YT vid url"/>
 
 </LinearLayout>

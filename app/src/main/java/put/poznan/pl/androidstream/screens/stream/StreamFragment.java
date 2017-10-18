@@ -7,12 +7,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
 import put.poznan.pl.androidstream.R;
 import put.poznan.pl.androidstream.api.StreamApi;
+import put.poznan.pl.androidstream.api.YoutubeApi;
 import put.poznan.pl.androidstream.app.AppController;
 import put.poznan.pl.androidstream.screens.meetup.MeetupActivity;
 import put.poznan.pl.androidstream.screens.stream.core.StreamPresenter;
@@ -21,9 +24,12 @@ import put.poznan.pl.androidstream.screens.stream.dagger.DaggerStreamComponent;
 import put.poznan.pl.androidstream.screens.stream.dagger.StreamComponent;
 
 public class StreamFragment extends MvpFragment<StreamView, StreamPresenter>
-implements StreamView{
+        implements StreamView {
 
-    StreamApi api;
+    @BindView(R.id.text_yt_vid_url)
+    TextView ytVidUrlView;
+
+    private YoutubeApi api;
     private Unbinder unbinder;
 
     private StreamComponent component;
@@ -43,7 +49,7 @@ implements StreamView{
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         injectDependencies();
         super.onViewCreated(view, savedInstanceState);
-        unbinder = ButterKnife.bind(this,getActivity());
+        unbinder = ButterKnife.bind(this, getActivity());
 
         getActivity().setTitle("Stream :)");
     }
@@ -56,7 +62,7 @@ implements StreamView{
     }
 
     @OnClick(R.id.button_goto_stream)
-    void showStreamScreen(){
+    void showStreamScreen() {
         Intent intent = new Intent(getActivity(), MeetupActivity.class);
         startActivity(intent);
     }
@@ -65,6 +71,6 @@ implements StreamView{
         component = DaggerStreamComponent.builder()
                 .appComponent(AppController.getAppComponent())
                 .build();
-        api = AppController.getAppComponent().streamApi();
+        api = AppController.getAppComponent().youtubeApi();
     }
 }
