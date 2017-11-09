@@ -118,7 +118,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 //                mContext.getPackageName());
 
         // Temporary create a bitmap
-        Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.pp_logo);
+        Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.mm_logo);
 
         // Bind texture to texturename
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
@@ -149,8 +149,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         vertices = new float[]{
                 10.0f, 200f, 0.0f,
                 10.0f, 100f, 0.0f,
-                100f, 100f, 0.0f,
-                100f, 200f, 0.0f,
+                190f, 100f, 0.0f,
+                190f, 200f, 0.0f,
         };
 
         indices = new short[]{0, 1, 2, 0, 2, 3}; // loop in the android official tutorial opengles why different order.
@@ -223,6 +223,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         // clear Screen and Depth Buffer, we have set the clear color as black.
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+        GLES20.glClearColor(0.0f,0.5f,0.5f,1.0f);
 
         // get handle to vertex shader's vPosition member
 //        int mPositionHandle = GLES20.glGetAttribLocation(riGraphicTools.sp_SolidColor, "vPosition");
