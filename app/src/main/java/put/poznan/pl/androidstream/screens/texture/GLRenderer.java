@@ -3,11 +3,14 @@ package put.poznan.pl.androidstream.screens.texture;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import put.poznan.pl.androidstream.R;
+import timber.log.Timber;
+import wseemann.media.FFmpegMediaMetadataRetriever;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -15,6 +18,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.Timer;
 
 import static javax.microedition.khronos.opengles.GL10.GL_CLAMP_TO_EDGE;
 
@@ -63,6 +67,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         SetupTriangle();
         // Create the image information
         SetupImage();
+        SetupVideo();
 
         // Set the clear color to black
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1);
@@ -91,6 +96,11 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         // Set our shader programm
         GLES20.glUseProgram(riGraphicTools.sp_Image);
 //        GLES20.glUseProgram(riGraphicTools.sp_SolidColor);
+    }
+
+    private void SetupVideo() {
+        String path = "android.resource://" + mContext.getPackageName() + "/" + R.raw.sample;
+        Uri uri = Uri.parse(path);
     }
 
     private void SetupImage() {
