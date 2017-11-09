@@ -15,6 +15,7 @@ import put.poznan.pl.androidstream.screens.meetup.MeetupFragment;
 import put.poznan.pl.androidstream.screens.opengl.OpenGLActivity;
 import put.poznan.pl.androidstream.screens.opengl.OpenGLFragment;
 import put.poznan.pl.androidstream.screens.stream.StreamFragment;
+import put.poznan.pl.androidstream.screens.texture.TextureActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,7 +36,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        showScreenById(R.id.action_opengl);
+        showScreenById(R.id.action_gl_texture);
+//        showScreenById(R.id.action_opengl);
     }
 
     @Override
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showScreenById(int id) {
         Fragment fragment = null;
+        Intent intent = null;
 
         switch (id) {
             case R.id.action_meetup:
@@ -69,7 +72,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_opengl:
 //                fragment = new OpenGLFragment();
-                Intent intent = new Intent(this, OpenGLActivity.class);
+                intent = new Intent(this, OpenGLActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.action_gl_texture:
+                intent = new Intent(this, TextureActivity.class);
                 startActivity(intent);
                 break;
         }

@@ -30,6 +30,8 @@
         </activity>
         <activity android:name=".screens.opengl.OpenGLActivity">
         </activity>
+        <activity android:name=".screens.texture.TextureActivity">
+        </activity>
     </application>
 
 </manifest>

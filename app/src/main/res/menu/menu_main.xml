@@ -6,6 +6,10 @@
           android:title="@string/action_opengl"
           android:orderInCategory="100"
           app:showAsAction="never"/>
+    <item android:id="@+id/action_gl_texture"
+          android:title="GL Texture"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
     <item android:id="@+id/action_stream"
           android:title="@string/sction_stream"
           android:orderInCategory="100"
