@@ -3,6 +3,7 @@ package put.poznan.pl.androidstream.screens.texture;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -10,7 +11,6 @@ import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import put.poznan.pl.androidstream.R;
 import timber.log.Timber;
-import wseemann.media.FFmpegMediaMetadataRetriever;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -99,13 +99,74 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     }
 
     private void SetupVideo() {
+        // Create our UV coordinates.
+        uvs = new float[]{
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f
+        };
+
+        // The texture buffer
+        ByteBuffer bb = ByteBuffer.allocateDirect(uvs.length * 4);
+        bb.order(ByteOrder.nativeOrder());
+        uvBuffer = bb.asFloatBuffer();
+        uvBuffer.put(uvs);
+        uvBuffer.position(0);
+
+        // Generate Textures, if more needed, alter these numbers.
+        int[] texturenames = new int[1];
+        GLES20.glGenTextures(1, texturenames, 0);
+
         String path = "android.resource://" + mContext.getPackageName() + "/" + R.raw.sample;
         Uri uri = Uri.parse(path);
+
+        Bitmap bmp = createVideoThumbnail(mContext, uri);
+
+        // Bind texture to texturename
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[0]);
+
+        // Set filtering
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,
+                GLES20.GL_LINEAR);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER,
+                GLES20.GL_LINEAR);
+
+        // Set wrapping mode
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S,
+                GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,
+                GL_CLAMP_TO_EDGE);
+
+        // Load the bitmap into the bound texture.
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0);
+
+        // We are done using the bitmap so we should recycle it.
+        bmp.recycle();
+    }
+
+    public static Bitmap createVideoThumbnail(Context context, Uri uri) {
+        Bitmap bitmap = null;
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            retriever.setDataSource(context, uri);
+            bitmap = retriever.getFrameAtTime(-1);
+        } catch (RuntimeException ex) {
+            // Assume this is a corrupt video file.
+        } finally {
+            try {
+                retriever.release();
+            } catch (RuntimeException ex) {
+                // Ignore failures while cleaning up.
+            }
+        }
+        return bitmap;
     }
 
     private void SetupImage() {
         // Create our UV coordinates.
-        uvs = new float[] {
+        uvs = new float[]{
                 0.0f, 0.0f,
                 0.0f, 1.0f,
                 1.0f, 1.0f,
@@ -155,12 +216,16 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
     private void SetupTriangle() {
 
+        float x = 10.0f;
+        float y = 10.0f;
+        float w = 640.0f;
+        float h = 360.0f;
         // We have create the vertices of our view.
         vertices = new float[]{
-                10.0f, 200f, 0.0f,
-                10.0f, 100f, 0.0f,
-                190f, 100f, 0.0f,
-                190f, 200f, 0.0f,
+                x, y + h, 0.0f,
+                x, y, 0.0f,
+                x + w, y, 0.0f,
+                x + w, y + h, 0.0f,
         };
 
         indices = new short[]{0, 1, 2, 0, 2, 3}; // loop in the android official tutorial opengles why different order.
@@ -233,7 +298,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         // clear Screen and Depth Buffer, we have set the clear color as black.
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-        GLES20.glClearColor(0.0f,0.5f,0.5f,1.0f);
+        GLES20.glClearColor(0.0f, 0.5f, 0.5f, 1.0f);
 
         // get handle to vertex shader's vPosition member
 //        int mPositionHandle = GLES20.glGetAttribLocation(riGraphicTools.sp_SolidColor, "vPosition");
@@ -249,13 +314,13 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         // Get handle to texture coordinates location
         int mTexCoordLoc = GLES20.glGetAttribLocation(riGraphicTools.sp_Image,
-                "a_texCoord" );
+                "a_texCoord");
 
         // Enable generic vertex attribute array
-        GLES20.glEnableVertexAttribArray ( mTexCoordLoc );
+        GLES20.glEnableVertexAttribArray(mTexCoordLoc);
 
         // Prepare the texturecoordinates
-        GLES20.glVertexAttribPointer ( mTexCoordLoc, 2, GLES20.GL_FLOAT,
+        GLES20.glVertexAttribPointer(mTexCoordLoc, 2, GLES20.GL_FLOAT,
                 false,
                 0, uvBuffer);
 
@@ -267,11 +332,11 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         GLES20.glUniformMatrix4fv(mtrxhandle, 1, false, m, 0);
 
         // Get handle to textures locations
-        int mSamplerLoc = GLES20.glGetUniformLocation (riGraphicTools.sp_Image,
-                "s_texture" );
+        int mSamplerLoc = GLES20.glGetUniformLocation(riGraphicTools.sp_Image,
+                "s_texture");
 
         // Set the sampler texture unit to 0, where we have saved the texture.
-        GLES20.glUniform1i ( mSamplerLoc, 0);
+        GLES20.glUniform1i(mSamplerLoc, 0);
 
         // Draw the triangle
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, indices.length,
