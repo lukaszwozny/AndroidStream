@@ -22,6 +22,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    configurations.all {
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+    }
 }
 
 dependencies {
@@ -66,4 +69,6 @@ dependencies {
     compile 'com.hannesdorfmann.annotatedadapter:annotation:1.1.1'
     compile 'com.hannesdorfmann.annotatedadapter:support-recyclerview:1.1.1'
     annotationProcessor 'com.hannesdorfmann.annotatedadapter:processor:1.1.1'
+
+    compile 'org.jcodec:jcodec:0.2.1'
 }

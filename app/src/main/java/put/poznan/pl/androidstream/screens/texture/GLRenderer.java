@@ -10,12 +10,20 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
+import android.os.Environment;
 import android.view.MotionEvent;
+import org.jcodec.api.FrameGrab;
+import org.jcodec.api.JCodecException;
+import org.jcodec.common.model.Picture;
 import put.poznan.pl.androidstream.R;
 import timber.log.Timber;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -51,9 +59,15 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     long mLastTime;
     int mProgram;
 
+    String video_path;
+    Uri video_uri;
+
     public GLRenderer(Context context) {
         this.mContext = context;
         mLastTime = System.currentTimeMillis() + 100;
+
+        video_path = "android.resource://" + mContext.getPackageName() + "/" + R.raw.sample;
+        video_uri = Uri.parse(video_path);
     }
 
     public void onPause() {
@@ -123,10 +137,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         int[] texturenames = new int[1];
         GLES20.glGenTextures(1, texturenames, 0);
 
-        String path = "android.resource://" + mContext.getPackageName() + "/" + R.raw.sample;
-        Uri uri = Uri.parse(path);
-
-        Bitmap bmp = createVideoThumbnail(mContext, uri);
+        Bitmap bmp = createVideoThumbnail();
 
         // Bind texture to texturename
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
@@ -151,12 +162,31 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         bmp.recycle();
     }
 
-    public static Bitmap createVideoThumbnail(Context context, Uri uri) {
+    public Bitmap createVideoThumbnail() {
+        int frameNumber = 42;
+        try {
+            String filePath = Environment.getExternalStorageDirectory().toString() + "/Download";
+            String fileName = "sample.mp4";
+            File f = new File(filePath,fileName);
+            Picture picture = FrameGrab.getFrameFromFile(f, frameNumber);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Timber.e(e);
+        } catch (JCodecException e) {
+            e.printStackTrace();
+            Timber.e(e);
+        }
+
+
         Bitmap bitmap = null;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         try {
-            retriever.setDataSource(context, uri);
-            bitmap = retriever.getFrameAtTime(-1);
+            retriever.setDataSource(mContext, video_uri);
+            String duration = retriever.extractMetadata(
+                    MediaMetadataRetriever.METADATA_KEY_DURATION
+            );
+            long frame_time = 5* 1000 * 1000* 1000;
+            bitmap = retriever.getFrameAtTime(frame_time);
         } catch (RuntimeException ex) {
             // Assume this is a corrupt video file.
         } finally {
