@@ -2,8 +2,15 @@ package put.poznan.pl.androidstream.screens.texture;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.view.MotionEvent;
 
 public class GLSurf extends GLSurfaceView {
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        mRenderer.processTouchEvent(event);
+        return true;
+    }
+
     private final GLRenderer mRenderer;
 
     public GLSurf(Context context) {

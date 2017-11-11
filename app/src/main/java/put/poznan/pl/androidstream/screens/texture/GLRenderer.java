@@ -3,12 +3,14 @@ package put.poznan.pl.androidstream.screens.texture;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
+import android.view.MotionEvent;
 import put.poznan.pl.androidstream.R;
 import timber.log.Timber;
 
@@ -37,6 +39,9 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     public ShortBuffer drawListBuffer;
     public FloatBuffer uvBuffer;
 
+    // Variables for changing
+    private Rect video;
+
     // Our screenresolution
     float mScreenWidth = 1280;
     float mScreenHeight = 768;
@@ -64,9 +69,9 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 
         // Create the triangle
-        SetupTriangle();
+        SetupTriangle(60, 600, 640, 360);
         // Create the image information
-        SetupImage();
+//        SetupImage();
         SetupVideo();
 
         // Set the clear color to black
@@ -214,13 +219,16 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         bmp.recycle();
     }
 
-    private void SetupTriangle() {
-
-        float x = 10.0f;
-        float y = 10.0f;
-        float w = 640.0f;
-        float h = 360.0f;
+    private void SetupTriangle(float x, float y, float w, float h) {
         // We have create the vertices of our view.
+
+        // Initial rect
+        video = new Rect();
+        video.left = (int) x;
+        video.right = (int) (x + w);
+        video.bottom = (int) y;
+        video.top = (int) (y + h);
+
         vertices = new float[]{
                 x, y + h, 0.0f,
                 x, y, 0.0f,
@@ -244,6 +252,40 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         drawListBuffer.put(indices);
         drawListBuffer.position(0);
 
+    }
+
+    public void translateSprite() {
+        vertices = new float[]{
+                video.left, video.top, 0.0f,
+                video.left, video.bottom, 0.0f,
+                video.right, video.bottom, 0.0f,
+                video.right, video.top, 0.0f,
+        };
+        // The vertex buffer.
+        ByteBuffer bb = ByteBuffer.allocateDirect(vertices.length * 4);
+        bb.order(ByteOrder.nativeOrder());
+        vertexBuffer = bb.asFloatBuffer();
+        vertexBuffer.put(vertices);
+        vertexBuffer.position(0);
+    }
+
+    public void processTouchEvent(MotionEvent event)
+    {
+        // Get the half of screen value
+        int screenhalf = (int) (mScreenWidth / 2);
+        if(event.getX()<screenhalf)
+        {
+            video.left -= 10;
+            video.right -= 10;
+        }
+        else
+        {
+            video.left += 10;
+            video.right += 10;
+        }
+
+        // Update the new data.
+        translateSprite();
     }
 
     @Override
