@@ -16,6 +16,7 @@ import org.jcodec.api.FrameGrab;
 import org.jcodec.api.JCodecException;
 import org.jcodec.common.model.Picture;
 import put.poznan.pl.androidstream.R;
+import put.poznan.pl.androidstream.utils.AndroidUtil;
 import timber.log.Timber;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -164,11 +165,17 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
     public Bitmap createVideoThumbnail() {
         int frameNumber = 42;
+        Bitmap bitmap = null;
         try {
             String filePath = Environment.getExternalStorageDirectory().toString() + "/Download";
             String fileName = "sample.mp4";
             File f = new File(filePath,fileName);
             Picture picture = FrameGrab.getFrameFromFile(f, frameNumber);
+            bitmap = AndroidUtil.toBitmap(picture);
+            if (bitmap != null){
+                Timber.i("Yeah :))");
+                return bitmap;
+            }
         } catch (IOException e) {
             e.printStackTrace();
             Timber.e(e);
@@ -178,7 +185,6 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         }
 
 
-        Bitmap bitmap = null;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         try {
             retriever.setDataSource(mContext, video_uri);
