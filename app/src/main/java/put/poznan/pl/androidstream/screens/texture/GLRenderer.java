@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -12,24 +11,18 @@ import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.os.Environment;
 import android.view.MotionEvent;
-import org.jcodec.api.FrameGrab;
-import org.jcodec.api.JCodecException;
-import org.jcodec.common.model.Picture;
 import put.poznan.pl.androidstream.R;
-import put.poznan.pl.androidstream.utils.AndroidUtil;
 import timber.log.Timber;
+import wseemann.media.FFmpegMediaMetadataRetriever;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
-import java.util.Timer;
 
 import static javax.microedition.khronos.opengles.GL10.GL_CLAMP_TO_EDGE;
 
@@ -39,6 +32,8 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     private final float[] mtrxProjection = new float[16];
     private final float[] mtrxView = new float[16];
     private final float[] mtrxProjectionAndView = new float[16];
+
+    public final static FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
 
     // Geometric variables
     public static float vertices[];
@@ -58,10 +53,14 @@ public class GLRenderer implements GLSurfaceView.Renderer {
     // Misc
     Context mContext;
     long mLastTime;
+    long mStartVideoTime;
     int mProgram;
 
     String video_path;
     Uri video_uri;
+    String filePath = Environment.getExternalStorageDirectory().toString() + "/Download";
+    String fileName = "sample.mp4";
+    String videoPathNew = "mnt/sdcard/Download/sample.mp4";
 
     public GLRenderer(Context context) {
         this.mContext = context;
@@ -138,7 +137,7 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         int[] texturenames = new int[1];
         GLES20.glGenTextures(1, texturenames, 0);
 
-        Bitmap bmp = createVideoThumbnail();
+        Bitmap bmp = getVideoFrame(0);
 
         // Bind texture to texturename
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
@@ -161,47 +160,27 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         // We are done using the bitmap so we should recycle it.
         bmp.recycle();
+
+        mStartVideoTime = System.currentTimeMillis();
     }
 
-    public Bitmap createVideoThumbnail() {
-        int frameNumber = 42;
+    public Bitmap getVideoFrame(long frameTimems) {
+        // FFmpeg
         Bitmap bitmap = null;
         try {
-            String filePath = Environment.getExternalStorageDirectory().toString() + "/Download";
-            String fileName = "sample.mp4";
-            File f = new File(filePath,fileName);
-            Picture picture = FrameGrab.getFrameFromFile(f, frameNumber);
-            bitmap = AndroidUtil.toBitmap(picture);
-            if (bitmap != null){
-                Timber.i("Yeah :))");
-                return bitmap;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            Timber.e(e);
-        } catch (JCodecException e) {
+            mmr.setDataSource(videoPathNew); //file's path
+//            mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ALBUM);
+//            mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST);
+            long frameTimeUs = frameTimems * 1000;
+            bitmap = mmr.getFrameAtTime(frameTimeUs,FFmpegMediaMetadataRetriever.OPTION_CLOSEST );
+        } catch (Exception e) {
             e.printStackTrace();
             Timber.e(e);
         }
+//        finally{
+//            mmr.release();
+//        }
 
-
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        try {
-            retriever.setDataSource(mContext, video_uri);
-            String duration = retriever.extractMetadata(
-                    MediaMetadataRetriever.METADATA_KEY_DURATION
-            );
-            long frame_time = 5* 1000 * 1000* 1000;
-            bitmap = retriever.getFrameAtTime(frame_time);
-        } catch (RuntimeException ex) {
-            // Assume this is a corrupt video file.
-        } finally {
-            try {
-                retriever.release();
-            } catch (RuntimeException ex) {
-                // Ignore failures while cleaning up.
-            }
-        }
         return bitmap;
     }
 
@@ -305,17 +284,13 @@ public class GLRenderer implements GLSurfaceView.Renderer {
         vertexBuffer.position(0);
     }
 
-    public void processTouchEvent(MotionEvent event)
-    {
+    public void processTouchEvent(MotionEvent event) {
         // Get the half of screen value
         int screenhalf = (int) (mScreenWidth / 2);
-        if(event.getX()<screenhalf)
-        {
+        if (event.getX() < screenhalf) {
             video.left -= 10;
             video.right -= 10;
-        }
-        else
-        {
+        } else {
             video.left += 10;
             video.right += 10;
         }
@@ -362,6 +337,9 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         // Get the amount of time the last frame took.
         long elapsed = now - mLastTime;
+        long elapsedFromFrame = now - mStartVideoTime;
+
+        updateVideo(elapsedFromFrame);
 
         // Update our example
 
@@ -370,6 +348,21 @@ public class GLRenderer implements GLSurfaceView.Renderer {
 
         // Save the current time to see how long it took <img src="http://androidblog.reindustries.com/wp-includes/images/smilies/icon_smile.gif" alt=":)" class="wp-smiley"> .
         mLastTime = now;
+    }
+
+    private void updateVideo(long frameTime) {
+        Bitmap bmp = getVideoFrame(frameTime);
+        if (bmp == null){
+            mStartVideoTime = 0;
+            return;
+        }
+//        Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.mm_logo);
+
+        // Load the bitmap into the bound texture.
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0);
+
+        // We are done using the bitmap so we should recycle it.
+        bmp.recycle();
     }
 
     private void render(float[] m) {
