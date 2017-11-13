@@ -16,6 +16,7 @@ import put.poznan.pl.androidstream.screens.opengl.OpenGLActivity;
 import put.poznan.pl.androidstream.screens.opengl.OpenGLFragment;
 import put.poznan.pl.androidstream.screens.stream.StreamFragment;
 import put.poznan.pl.androidstream.screens.texture.TextureActivity;
+import put.poznan.pl.androidstream.screens.video.VideoActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        showScreenById(R.id.action_gl_texture);
+        showScreenById(R.id.action_gl_video);
+//        showScreenById(R.id.action_gl_texture);
 //        showScreenById(R.id.action_opengl);
     }
 
@@ -77,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_gl_texture:
                 intent = new Intent(this, TextureActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.action_gl_video:
+                intent = new Intent(this, VideoActivity.class);
                 startActivity(intent);
                 break;
         }

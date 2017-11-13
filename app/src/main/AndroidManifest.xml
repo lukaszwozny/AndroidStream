@@ -40,6 +40,8 @@
         </activity>
         <activity android:name=".screens.texture.TextureActivity">
         </activity>
+        <activity android:name=".screens.video.VideoActivity">
+        </activity>
     </application>
 
 </manifest>

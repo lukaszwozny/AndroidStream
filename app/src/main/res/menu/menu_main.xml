@@ -10,6 +10,10 @@
           android:title="GL Texture"
           android:orderInCategory="100"
           app:showAsAction="never"/>
+    <item android:id="@+id/action_gl_video"
+          android:title="GL Video"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
     <item android:id="@+id/action_stream"
           android:title="@string/sction_stream"
           android:orderInCategory="100"
