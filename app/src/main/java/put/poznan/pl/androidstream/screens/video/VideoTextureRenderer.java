@@ -69,11 +69,14 @@ public class VideoTextureRenderer extends TextureSurfaceRenderer implements Surf
     private int videoHeight;
     private boolean adjustViewport = false;
 
-    public VideoTextureRenderer(Context context, SurfaceTexture texture, int width, int height)
+    private VideoCallback callback;
+
+    public VideoTextureRenderer(Context context, SurfaceTexture texture, int width, int height, VideoCallback callback)
     {
         super(texture, width, height);
         this.ctx = context;
         videoTextureTransform = new float[16];
+        this.callback = callback;
     }
 
     private void loadShaders()
@@ -223,6 +226,8 @@ public class VideoTextureRenderer extends TextureSurfaceRenderer implements Surf
         setupVertexBuffer();
         setupTexture(ctx);
         loadShaders();
+
+        callback.tryCatch();
     }
 
     @Override

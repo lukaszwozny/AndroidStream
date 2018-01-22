@@ -36,7 +36,8 @@ public abstract class TextureSurfaceRenderer implements Runnable {
     }
 
     @Override
-    public void run() {
+    public void run()
+    {
         initGL();
         initGLComponents();
         Log.d(LOG_TAG, "OpenGL init OK.");
@@ -99,6 +100,7 @@ public abstract class TextureSurfaceRenderer implements Runnable {
         }
     }
 
+
     /**
      * Call when activity pauses. This stops the rendering thread and deinitializes OpenGL.
      */
@@ -106,6 +108,7 @@ public abstract class TextureSurfaceRenderer implements Runnable {
     {
         running = false;
     }
+
 
     private void initGL()
     {
