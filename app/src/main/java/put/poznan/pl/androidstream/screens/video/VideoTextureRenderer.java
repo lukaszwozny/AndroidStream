@@ -30,9 +30,11 @@ public class VideoTextureRenderer extends TextureSurfaceRenderer implements Surf
             "#extension GL_OES_EGL_image_external : require\n" +
                     "precision mediump float;" +
                     "uniform samplerExternalOES texture;" +
+                    "uniform float redTransform;" +
                     "varying vec2 v_TexCoordinate;" +
                     "void main () {" +
                     "    vec4 color = texture2D(texture, v_TexCoordinate);" +
+                    "    color.r = redTransform;" +
                     "    gl_FragColor = color;" +
                     "}";
 
@@ -177,6 +179,7 @@ public class VideoTextureRenderer extends TextureSurfaceRenderer implements Surf
         int textureCoordinateHandle = GLES20.glGetAttribLocation(shaderProgram, "vTexCoordinate");
         int positionHandle = GLES20.glGetAttribLocation(shaderProgram, "vPosition");
         int textureTranformHandle = GLES20.glGetUniformLocation(shaderProgram, "textureTransform");
+        int redTranformHandle = GLES20.glGetUniformLocation(shaderProgram, "redTransform");
 
         GLES20.glEnableVertexAttribArray(positionHandle);
         GLES20.glVertexAttribPointer(positionHandle, 3, GLES20.GL_FLOAT, false, 4 * 3, vertexBuffer);
@@ -189,6 +192,7 @@ public class VideoTextureRenderer extends TextureSurfaceRenderer implements Surf
         GLES20.glVertexAttribPointer(textureCoordinateHandle, 4, GLES20.GL_FLOAT, false, 0, textureBuffer);
 
         GLES20.glUniformMatrix4fv(textureTranformHandle, 1, false, videoTextureTransform, 0);
+        GLES20.glUniform1f(redTranformHandle, 0.5f);
 
         GLES20.glDrawElements(GLES20.GL_TRIANGLES, drawOrder.length, GLES20.GL_UNSIGNED_SHORT, drawListBuffer);
         GLES20.glDisableVertexAttribArray(positionHandle);
